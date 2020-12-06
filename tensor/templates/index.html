@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RakuTensor</title>
+
+    <script src="{% static 'js/chart.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/init.css' %}" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/templete.css' %}"
+    />
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="body-container">
+      <div class="main-title">Raku Tensor</div>
+      <div class="select-container">
+        <div class="select-left-container">
+          <div class="select-box">
+            <div>객체를 선택해주세요</div>
+            <select name="object">
+              <option value="">객체선택</option>
+              <option value="banana">banana</option>
+              <option value="apple" selected="selected">apple</option>
+              <option value="mouse">mouse</option>
+            </select>
+          </div>
+          <div class="select-box">
+            <div class="btn-test-container">1 차 객체 인식 실험</div>
+            <div class="btn-test-container color-dark">모델 저장</div>
+          </div>
+        </div>
+        <div class="select-right-container">
+          <div class="image-container">
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+            <div class="image-item">이미지</div>
+          </div>
+        </div>
+      </div>
+      <div class="result-container">
+        <div id="chartContainer" style="height: 370px; width: 50%;"></div>
+        <div class="result-items">1차 결과 ...</div>
+        <div class="result-items">1차 결과 ...</div>
+        <div class="result-items">1차 결과 ...</div>
+        <div class="result-items">1차 결과 ...</div>
+      </div>
+    </div>
+  </body>
+</html>
