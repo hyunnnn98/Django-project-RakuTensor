@@ -1,0 +1,99 @@
+body {
+  background-color: rgba(0, 0, 0, 0.055);
+  color: white;
+}
+.body-container {
+  background-color: rgb(39, 39, 39);
+  width: 1200px;
+  margin: 20px auto;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 3px 5px 15px 5px rgba(0, 0, 0, 0.219);
+}
+
+.main-title {
+  text-align: center;
+  font-size: 50px;
+  margin-bottom: 25px;
+  margin-top: 10px;
+  font-weight: 900;
+}
+
+.select-container {
+  display: flex;
+  /* align-items: center; */
+}
+
+.select-left-container {
+  width: 400px;
+  box-sizing: border-box;
+  background-color: rgba(167, 167, 167, 0.13);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0px 20px;
+}
+
+.select-box {
+  width: 100%;
+}
+
+.select-left-container select {
+  width: 100%;
+  height: 50px;
+  font-size: 18px;
+  font-family: inherit; /* 폰트 상속 */
+  font-weight: 700;
+  padding: 0px 10px;
+  margin-top: 10px;
+}
+
+.btn-test-container {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px;
+  background-color: #3d49f3;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 20px;
+  border-radius: 7px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.color-dark {
+  background-color: #be0ff3;
+}
+
+.select-right-container {
+  flex: 1;
+  box-sizing: border-box;
+  margin-left: 10px;
+  background-color: rgba(82, 37, 245, 0.253);
+}
+
+.image-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-width: 500px;
+}
+
+.image-item {
+  box-sizing: border-box;
+  /* padding: 10px 20px; */
+  background-color: rgba(212, 212, 212, 0.199);
+  margin: 10px;
+  min-width: 138px;
+  min-height: 138px;
+}
+
+.result-container {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-around;
+  align-items: center;
+  margin: 50px;
+}

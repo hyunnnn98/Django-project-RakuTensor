@@ -44,7 +44,7 @@ def detail(request):
     #     print(f'JSONparsed data: {data}')
     #     return JsonResponse(data)
 
-def training_data(objects, img_size):
+def training_data(objects, img_size, count):
     print('받은 데이터값:', objects, img_size)
     """
     학습 시킬 데이터 셋 생성 return X
@@ -69,6 +69,8 @@ def training_data(objects, img_size):
     for idex, categorie in enumerate(categories):
         label = idex
         image_dir = groups_folder_path + categorie + '/data/'
+
+        check = 0
     
         for top, dir, f in os.walk(image_dir):
             for filename in f:
@@ -79,6 +81,10 @@ def training_data(objects, img_size):
                 X.append(img)
                 Y.append(label)
 
+                check = check + 1
+                if check > count :
+                    break
+
     X = np.array(X)
     Y = np.array(Y)
     print('test', len(X), len(Y))
@@ -88,7 +94,7 @@ def training_data(objects, img_size):
     np.save("./img_data.npy", xy)
     print("DONE")
 
-def make_model(objects, size_img, num_classes, num_imgs):
+def make_model(objects, size_img, num_classes):
     """
     training_data 함수의 모델(img_data.npy)을 사용하여 학습 후 테스트 후 신뢰도 return
     return = 신뢰도 - float
@@ -98,9 +104,6 @@ def make_model(objects, size_img, num_classes, num_imgs):
     # allow_pickle이 기본적으로 False라서 True로 변환해 주지 않으면 읽지 못함
     train_images, test_images, train_labels, test_labels = np.load('img_data.npy', allow_pickle=True)
     class_names = objects
-
-    train_images = train_images[0:num_imgs]
-    train_labels = train_labels[0:num_imgs]
 
     """
     image 전처리
@@ -131,7 +134,7 @@ def make_model(objects, size_img, num_classes, num_imgs):
     print('\n테스트 정확도:', str(test_acc * 100) + "%")
     # print(str(int(time.time() - ap)) + " second")
 
-    return test_acc * 100
+    return test_acc
 
 @csrf_exempt
 def make_model_train(request):
@@ -150,14 +153,13 @@ def make_model_train(request):
     # 이미지 크기
     SIZE_IMAGE = 256
     # 데이터 모델 생성
-    training_data(objects, SIZE_IMAGE)
+    training_data(objects, SIZE_IMAGE, NUM_IMAGES * count)
 
     # 학습 결과 return
-    print(str(make_model(objects, SIZE_IMAGE, len(objects), NUM_IMAGES * count)))
+    # print(str(make_model(objects, SIZE_IMAGE, len(objects)))
 
-    # response = {
-    #     # 'result' : str(make_model(objects, SIZE_IMAGE, len(objects), NUM_IMAGES * count))
-    #     'result' : img
-    # }
-    return JsonResponse('hello')
-    # return JsonResponse(response)
+    response = {
+        'result' : make_model(objects, SIZE_IMAGE, len(objects))
+    }
+    # return JsonResponse('hello')
+    return JsonResponse(response)
