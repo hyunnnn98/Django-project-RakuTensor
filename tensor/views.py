@@ -37,13 +37,8 @@ def detail(request):
         'results': [0.5, 0.6, 0.7, 0.8, 0.755],
     }
     return JsonResponse(response, safe=False)
-    # if request.method == 'GET':
-    #     return JsonResponse({1, 2, 3})
-    # elif request.method == 'POST':
-    #     data = JSONParser().parse(request)
-    #     print(f'JSONparsed data: {data}')
-    #     return JsonResponse(data)
 
+@csrf_exempt
 def training_data(objects, img_size, count):
     print('받은 데이터값:', objects, img_size)
     """
@@ -69,30 +64,55 @@ def training_data(objects, img_size, count):
     for idex, categorie in enumerate(categories):
         label = idex
         image_dir = groups_folder_path + categorie + '/data/'
-
-        check = 0
     
+        check = 0
+
         for top, dir, f in os.walk(image_dir):
             for filename in f:
                 print('이미지는?', image_dir, filename)
+                check = check + 1
+                if(check > count):
+                    break
+
                 img = cv2.imread(image_dir+filename)
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 img = cv2.resize(img, None, fx=image_w/img.shape[1], fy=image_h/img.shape[0])
                 X.append(img)
                 Y.append(label)
 
+    X_train = np.array(X)
+    Y_train = np.array(Y)
+    # X_train, X_test, Y_train, Y_test = train_test_split(X,Y)
+    #########################################################################################################
+    X = []
+    Y = []
+    
+    for idex, categorie in enumerate(categories):
+        label = idex
+        image_dir = groups_folder_path + categorie + '/data/'
+    
+        check = 0
+
+        for top, dir, f in os.walk(image_dir):
+            for filename in f:
                 check = check + 1
-                if check > count :
+                if(check > 150):
                     break
 
-    X = np.array(X)
-    Y = np.array(Y)
-    print('test', len(X), len(Y))
-    X_train, X_test, Y_train, Y_test = train_test_split(X,Y)
+                img = cv2.imread(image_dir+filename)
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                img = cv2.resize(img, None, fx=image_w/img.shape[1], fy=image_h/img.shape[0])
+                X.append(img)
+                Y.append(label)
+
+    X_test = np.array(X)
+    Y_test = np.array(Y)
+    #########################################################################################################
     xy = (X_train, X_test, Y_train, Y_test)
     print("train Data :", len(X_train), ", test Data :", len(X_test))
     np.save("./img_data.npy", xy)
     print("DONE")
+
 
 def make_model(objects, size_img, num_classes):
     """
@@ -114,7 +134,7 @@ def make_model(objects, size_img, num_classes):
 
     # 모델링 시작
     model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(size_img, size_img,3)),
+        keras.layers.Flatten(input_shape=(size_img, size_img, 3)),
         keras.layers.Dense(256, activation='relu'),
         keras.layers.Dense(128, activation='relu'),
         keras.layers.Dense(num_classes, activation='softmax')
@@ -126,7 +146,7 @@ def make_model(objects, size_img, num_classes):
                 metrics=['accuracy'])
 
     # 모델 학습 시작
-    model.fit(train_images, train_labels, epochs=15)
+    model.fit(train_images, train_labels, epochs=25)
 
     # 가중치 테스트
     test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
@@ -155,11 +175,8 @@ def make_model_train(request):
     # 데이터 모델 생성
     training_data(objects, SIZE_IMAGE, NUM_IMAGES * count)
 
-    # 학습 결과 return
-    # print(str(make_model(objects, SIZE_IMAGE, len(objects)))
-
     response = {
         'result' : make_model(objects, SIZE_IMAGE, len(objects))
     }
-    # return JsonResponse('hello')
+
     return JsonResponse(response)
